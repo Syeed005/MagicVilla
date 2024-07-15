@@ -11,13 +11,15 @@ namespace MagicVilla_API.Controllers {
     [ApiController]
     public class VillaNumberApiController : ControllerBase {
         private readonly IVillaNumberRepository dbVillaNo;
+        private readonly IVillaRepository dbVill;
         private readonly IMapper mapper;
         protected APIResponse response;
 
-        public VillaNumberApiController(IVillaNumberRepository dbVillaNo, IMapper mapper) {
+        public VillaNumberApiController(IVillaNumberRepository dbVillaNo, IMapper mapper, IVillaRepository dbVill) {
             this.dbVillaNo = dbVillaNo;
             this.mapper = mapper;
             this.response = new APIResponse();
+            this.dbVill = dbVill;
         }
 
         [HttpGet]
@@ -77,7 +79,13 @@ namespace MagicVilla_API.Controllers {
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(response);
-                }                
+                }
+                if (await dbVill.GetAsync(x => x.Id == villaNoCreated.VillaId) == null) {
+                    ModelState.AddModelError("Custom Error", "Villa id is not alreay exist");
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(response);
+                }
                 VillaNumber villaNumber = mapper.Map<VillaNumber>(villaNoCreated);
                 await dbVillaNo.CreateAsync(villaNumber);
                 response.Result = villaNumber;
@@ -128,12 +136,19 @@ namespace MagicVilla_API.Controllers {
                     response.IsSuccess = false;
                     return BadRequest(response);
                 }
-               
+
                 //if (await dbVillaNo.GetAsync(x => x.VillaNo == villaNumberDTOUpdated.VillaNo) == null) {
                 //    response.StatusCode = HttpStatusCode.NotFound;
                 //    response.IsSuccess = false;
                 //    return NotFound(response);
                 //}
+
+                if (await dbVill.GetAsync(x => x.Id == villaNumberDTOUpdated.VillaId) == null) {
+                    ModelState.AddModelError("Custom Error", "Villa id is not alreay exist");
+                    response.IsSuccess = false;
+                    response.StatusCode = HttpStatusCode.BadRequest;
+                    return BadRequest(response);
+                }
                 VillaNumber model = mapper.Map<VillaNumber>(villaNumberDTOUpdated);
                 await dbVillaNo.UpdateAsync(model);
                 response.StatusCode = HttpStatusCode.NoContent;
