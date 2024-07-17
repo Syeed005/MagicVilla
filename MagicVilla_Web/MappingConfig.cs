@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MagicVilla_Web.DTO;
+using MagicVilla_Web.Models.Dto;
 
 namespace MagicVilla_Web {
     public class MappingConfig : Profile{

@@ -1,5 +1,5 @@
 ﻿using MagicVilla_Utility;
-using MagicVilla_Web.DTO;
+using MagicVilla_Web.Models.Dto;
 using MagicVilla_Web.Models;
 using MagicVilla_Web.Services.IServices;
 using System.Net.Http.Headers;
