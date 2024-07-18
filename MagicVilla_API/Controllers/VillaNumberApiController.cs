@@ -26,7 +26,7 @@ namespace MagicVilla_API.Controllers {
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<APIResponse>> GetVillaNumber() {
             try {
-                response.Result = await dbVillaNo.GetAllAsync();
+                response.Result = await dbVillaNo.GetAllAsync(includePropertise:"Villa");
                 response.StatusCode = HttpStatusCode.OK;
                 return Ok(response);
             } catch (Exception ex) {
@@ -47,7 +47,7 @@ namespace MagicVilla_API.Controllers {
                     response.IsSuccess = false;
                     return BadRequest(response);
                 }
-                VillaNumber villaNo = await dbVillaNo.GetAsync(x => x.VillaNo == id);
+                VillaNumber villaNo = await dbVillaNo.GetAsync(x => x.VillaNo == id, includePropertise: "Villa");
                 if (villaNo == null) {
                     response.StatusCode = HttpStatusCode.NotFound;
                     response.IsSuccess = false;

@@ -12,16 +12,16 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Villa No</th>
-                <th>Special Details</th>
+                <th>Villa Name</th>
+                <th>Villa Number</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model) {
                 <tr>
+                    <td>@item.Villa.Name</td>
                     <td>@item.VillaNo</td>
-                    <td>@item.SpecialDetails</td>
                     <td>
                         <a asp-controller="Villa" asp-action="UpdateVilla" asp-route-villaId="@item.VillaNo" class="btn btn-outline-success"><i class="bi bi-pencil-square"></i></a>
                         <a asp-controller="Villa" asp-action="DeleteVilla" asp-route-villaId="@item.VillaNo" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></a>

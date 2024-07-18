@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Linq;
 using MagicVilla_API.Repository.IRepository;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace MagicVilla_API.Repository {
     public class Repository<T> : IRepository<T> where T:class {
@@ -18,21 +19,31 @@ namespace MagicVilla_API.Repository {
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null) {
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includePropertise = null) {
             IQueryable<T> query = _dbSet;
             if (filter != null) {
                 query = query.Where(filter);
             }
+            if (includePropertise != null) {
+                foreach (var includeProp in includePropertise.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
+                    query = query.Include(includeProp);
+                }
+            }
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true) {
+        public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, bool tracked = true, string? includePropertise = null) {
             IQueryable<T> query = _dbSet;
             if (tracked == false) {
                 query.AsNoTracking();
             }
             if (filter != null) {
                 query = query.Where(filter);
+            }
+            if (includePropertise != null) {
+                foreach (var includeProp in includePropertise.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) {
+                    query = query.Include(includeProp);
+                }
             }
             return await query.FirstOrDefaultAsync();
         }
