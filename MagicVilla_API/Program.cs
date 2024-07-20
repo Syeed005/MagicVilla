@@ -25,6 +25,11 @@ namespace MagicVilla_API {
             builder.Services.AddApiVersioning(options => {
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            });
+            builder.Services.AddVersionedApiExplorer(options => {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
             });
 
             var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
@@ -70,6 +75,34 @@ namespace MagicVilla_API {
                         new List<string>()
                     }
                 });
+                options.SwaggerDoc("v1", new OpenApiInfo {
+                    Version = "v1.0",
+                    Title = "Magic Villa",
+                    Description = "API to manage villa",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact {
+                        Name = "Sample Conatct Info",
+                        Url = new Uri("https://contactus.com")
+                    },
+                    License = new OpenApiLicense {
+                        Name = "Example License",
+                        Url = new Uri("https://license.com/info")
+                    }
+                });
+                options.SwaggerDoc("v2", new OpenApiInfo {
+                    Version = "v2.0",
+                    Title = "Magic Villa",
+                    Description = "API to manage villa",
+                    TermsOfService = new Uri("https://example.com/terms"),
+                    Contact = new OpenApiContact {
+                        Name = "Sample Conatct Info",
+                        Url = new Uri("https://contactus.com")
+                    },
+                    License = new OpenApiLicense {
+                        Name = "Example License",
+                        Url = new Uri("https://license.com/info")
+                    }
+                });
             });
 
             var app = builder.Build();
@@ -77,7 +110,10 @@ namespace MagicVilla_API {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment()) {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options => {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json","Magic_VillaV1");
+                    options.SwaggerEndpoint("/swagger/v2/swagger.json","Magic_VillaV2");
+                });
             }
 
             app.UseHttpsRedirection();

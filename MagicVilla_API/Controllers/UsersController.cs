@@ -4,22 +4,27 @@ using MagicVilla_API.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace MagicVilla_API.Controllers {
-    [Route("api/UsersAuth")]
+namespace MagicVilla_API.Controllers
+{
+    [Route("api/v{version:apiVersion}/UsersAuth")]
     [ApiController]
-    public class UsersController : Controller {
+    [ApiVersionNeutral]
+    public class UsersController : Controller
+    {
         private readonly IUserRepository userRepo;
         private readonly APIResponse response;
 
         public UsersController(IUserRepository userRepo)
         {
             this.userRepo = userRepo;
-            this.response = new();
+            response = new();
         }
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO) {
+        public async Task<IActionResult> Login(LoginRequestDTO loginRequestDTO)
+        {
             var loginResponse = await userRepo.Login(loginRequestDTO);
-            if (loginResponse.User == null || String.IsNullOrEmpty(loginResponse.Token)) {
+            if (loginResponse.User == null || string.IsNullOrEmpty(loginResponse.Token))
+            {
                 response.StatusCode = HttpStatusCode.BadRequest;
                 response.IsSuccess = false;
                 response.ErrorMessage.Add("Username or password is incorrect");
@@ -30,16 +35,19 @@ namespace MagicVilla_API.Controllers {
             return Ok(response);
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegistrationRequestDTO registrationRequestDTO) {
+        public async Task<IActionResult> Register(RegistrationRequestDTO registrationRequestDTO)
+        {
             bool isUserUnique = userRepo.IsUniqueUser(registrationRequestDTO.Name);
-            if (!isUserUnique) {
+            if (!isUserUnique)
+            {
                 response.StatusCode = HttpStatusCode.BadRequest;
                 response.IsSuccess = false;
                 response.ErrorMessage.Add("Username already exists");
                 return BadRequest(response);
             }
             var user = await userRepo.Register(registrationRequestDTO);
-            if (user == null) {
+            if (user == null)
+            {
                 response.StatusCode = HttpStatusCode.BadRequest;
                 response.IsSuccess = false;
                 response.ErrorMessage.Add("Error while registering");
