@@ -2,6 +2,7 @@
 using MagicVilla_API.DTO;
 using MagicVilla_API.Models;
 using MagicVilla_API.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
@@ -64,6 +65,7 @@ namespace MagicVilla_API.Controllers {
             return response;
         }
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -101,6 +103,7 @@ namespace MagicVilla_API.Controllers {
         }
 
         [HttpDelete("{id:int}", Name = "DeleteVillaNumber")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -128,6 +131,7 @@ namespace MagicVilla_API.Controllers {
         }
 
         [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
