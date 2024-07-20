@@ -17,7 +17,7 @@ namespace MagicVilla_Web.Services {
             return SendAsync<T>(new APIRequest() {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = url + "/api/UsersAuth/login"
+                Url = url + "/api/v1/UsersAuth/login"
             });
         }
 
@@ -25,7 +25,7 @@ namespace MagicVilla_Web.Services {
             return SendAsync<T>(new APIRequest() {
                 ApiType = SD.ApiType.POST,
                 Data = obj,
-                Url = url + "/api/UsersAuth/register"
+                Url = url + "/api/v1/UsersAuth/register"
             });
         }
     }
