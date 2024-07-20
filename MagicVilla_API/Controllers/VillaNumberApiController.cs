@@ -75,13 +75,15 @@ namespace MagicVilla_API.Controllers {
                     return BadRequest(response);
                 }
                 if (await dbVillaNo.GetAsync(x => x.VillaNo == villaNoCreated.VillaNo) != null) {
-                    ModelState.AddModelError("Custom Error", "Villa No is alreay exist");
+                    //ModelState.AddModelError("ErrorMessage", "Villa No is alreay exist");
+                    response.ErrorMessage = new List<string> { "Villa No is alreay exist" };
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(response);
                 }
                 if (await dbVill.GetAsync(x => x.Id == villaNoCreated.VillaId) == null) {
-                    ModelState.AddModelError("Custom Error", "Villa id is not alreay exist");
+                    //ModelState.AddModelError("ErrorMessage", "Villa id is not alreay exist");
+                    response.ErrorMessage = new List<string> { "ErrorMessage", "Villa id is not alreay exist" };
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(response);
@@ -98,7 +100,7 @@ namespace MagicVilla_API.Controllers {
             return response;
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}", Name = "DeleteVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,11 +127,11 @@ namespace MagicVilla_API.Controllers {
             return response;
         }
 
-        [HttpPut]
+        [HttpPut("{id:int}", Name = "UpdateVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody] VillaNumberDTOUpdated villaNumberDTOUpdated) {
+        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int id, [FromBody] VillaNumberDTOUpdated villaNumberDTOUpdated) {
             try {
                 if (villaNumberDTOUpdated == null || id != villaNumberDTOUpdated.VillaNo) {
                     response.StatusCode = HttpStatusCode.BadRequest;
@@ -144,7 +146,7 @@ namespace MagicVilla_API.Controllers {
                 //}
 
                 if (await dbVill.GetAsync(x => x.Id == villaNumberDTOUpdated.VillaId) == null) {
-                    ModelState.AddModelError("Custom Error", "Villa id is not alreay exist");
+                    ModelState.AddModelError("ErrorMessage", "Villa id is not alreay exist");
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(response);

@@ -76,7 +76,7 @@ namespace MagicVilla_API.Controllers {
         public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaDTOCreated villaCreateDTO) {
             try {
                 if (await _dbVilla.GetAsync(x => x.Name.ToLower() == villaCreateDTO.Name.ToLower()) != null) {
-                    ModelState.AddModelError("Custom Error", "Villa named already exist");
+                    ModelState.AddModelError("ErrorMessage", "Villa named already exist");
                     return BadRequest(ModelState);
                 }
 

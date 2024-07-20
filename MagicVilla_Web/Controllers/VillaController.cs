@@ -6,6 +6,8 @@ using MagicVilla_Web.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using MagicVilla_Web.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MagicVilla_Web.Controllers {
     public class VillaController : Controller {
@@ -26,7 +28,7 @@ namespace MagicVilla_Web.Controllers {
             return View(list);
         }
         [HttpGet]
-        public async Task<IActionResult> CreateVilla() {
+        public async Task<IActionResult> CreateVilla() {            
             return View();
         }
         [HttpPost]
@@ -35,9 +37,11 @@ namespace MagicVilla_Web.Controllers {
             if (ModelState.IsValid) {
                 var response = await villaService.CreateAsync<APIResponse>(model);
                 if (response != null && response.IsSuccess) {
+                    TempData["success"] = "Villa created successfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
             }
+            TempData["error"] = "Error encountered!";
             return View(model);
         }
 
@@ -56,9 +60,11 @@ namespace MagicVilla_Web.Controllers {
             if (ModelState.IsValid) {
                 var response = await villaService.UpdateAsync<APIResponse>(model);
                 if (response != null && response.IsSuccess) {
+                    TempData["success"] = "Villa updated successfully";
                     return RedirectToAction(nameof(IndexVilla));
                 }
             }
+            TempData["error"] = "Error encountered!";
             return View(model);
         }
 
@@ -76,9 +82,10 @@ namespace MagicVilla_Web.Controllers {
         public async Task<IActionResult> DeleteVilla(VillaDTO model) {
             var response = await villaService.DeleteAsync<APIResponse>(model.Id);
             if (response != null && response.IsSuccess) {
+                TempData["success"] = "Villa deleted successfully";
                 return RedirectToAction(nameof(IndexVilla));
             }
-
+            TempData["error"] = "Error encountered!";
             return View(model);
         }
     }
