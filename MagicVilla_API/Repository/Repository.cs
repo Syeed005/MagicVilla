@@ -19,10 +19,16 @@ namespace MagicVilla_API.Repository {
             await SaveAsync();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includePropertise = null) {
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, string? includePropertise = null, int pageSize = 0, int pageNumber = 1) {
             IQueryable<T> query = _dbSet;
             if (filter != null) {
                 query = query.Where(filter);
+            }
+            if (pageSize > 0) {
+                if (pageSize > 100) {
+                    pageSize = 100;
+                }
+                query = query.Skip(pageSize * (pageNumber - 1)).Take(pageSize);
             }
             if (includePropertise != null) {
                 foreach (var includeProp in includePropertise.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
