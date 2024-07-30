@@ -1,4 +1,5 @@
-# MagicVilla APP - https://magicvillaweb20240727151251.azurewebsites.net/
+# MagicVilla APP
+https://magicvillaweb20240727151251.azurewebsites.net/ <br /><br />
 A villa management app build on .net core 8 web api, Entity framwork with authentication and authorization in API and consume API. This project is done as a part of training session conducted by Bhrugen Patel.
 
 # What I Learned
