@@ -2,6 +2,15 @@
 https://magicvillaweb20240727151251.azurewebsites.net/ <br /><br />
 A villa management app built on .net core 8 web API, Entity framework with authentication and authorization in API and consume API. This project is done as a part of a training session conducted by Bhrugen Patel.
 
+# Technology Used
+- ASP NET Core
+- RESTful APIs
+- Swagger
+- Swashbuckle
+- API Versioning
+- EF Core
+- Authentication and Authorization
+
 # What I Learned
 - Learn fundamentals of ASP NET Core web API
 - Build RESTful APIs in .NET 8
